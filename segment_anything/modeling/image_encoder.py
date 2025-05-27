@@ -9,6 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from typing import Optional, Tuple, Type
+from tqdm import tqdm
 
 from .common import LayerNorm2d, MLPBlock
 
@@ -108,7 +109,7 @@ class ImageEncoderViT(nn.Module):
         if self.pos_embed is not None:
             x = x + self.pos_embed
 
-        for blk in self.blocks:
+        for blk in tqdm(self.blocks, ncols=120, desc="image encoder"):
             x = blk(x)
 
         x = self.neck(x.permute(0, 3, 1, 2))
